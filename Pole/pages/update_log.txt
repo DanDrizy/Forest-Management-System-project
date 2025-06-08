@@ -1,0 +1,33 @@
+2025-06-06 15:57:29 - Request: Array
+(
+    [id] => 1
+    [tree_name] => Pole ones
+    [record_date] => 2025-06-06
+    [po_amount] => 20
+    [height] => 15
+    [location] => Kigali
+)
+
+2025-06-06 15:57:29 - Error: Missing required parameters
+2025-06-06 16:00:46 - Request: Array
+(
+    [id] => 1
+    [tree_name] => Pole oneaaaaaaaa
+    [record_date] => 2025-06-06
+    [po_amount] => 20
+    [height] => 15
+    [location] => Kigali
+)
+
+2025-06-06 16:00:46 - Error: Missing required parameters
+2025-06-06 16:03:39 - Request: Array
+(
+    [id] => 1
+    [tree_name] => Pole oneaaa
+    [record_date] => 2025-06-06
+    [po_amount] => 20
+    [height] => 15
+    [location] => Kigali
+)
+
+2025-06-06 16:03:39 - Error: Missing required parameters

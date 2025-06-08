@@ -1,0 +1,160 @@
+
+        .menu-item.active-logs {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 3px solid #00dc82;
+        }
+        /* Additional CSS styles for editable cells and visual feedback */
+
+/* Editable cell styling */
+.editable-cell {
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 40px;
+    display: inline-block;
+}
+
+.editable-cell:hover {
+    background-color: #f0f0f0;
+}
+
+/* Input styling for cell editing */
+.edit-amount {
+    width: 80px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: inherit;
+}
+
+/* Visual feedback for updates */
+.update-success {
+    animation: flashSuccess 1s;
+}
+
+.update-error {
+    animation: flashError 1s;
+}
+
+@keyframes flashSuccess {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(76, 175, 80, 0.3); }
+}
+
+@keyframes flashError {
+    0%, 100% { background-color: transparent; }
+    50% { background-color: rgba(244, 67, 54, 0.3); }
+}
+
+/* Disable styling for delete button */
+.delete-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Checkbox styling */
+.checkbox-cell .checkbox {
+    cursor: pointer;
+}
+
+/* Row hover effect */
+#stockTable tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+
+
+/* 11111111111111111111111111111111 */
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 400px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dialog-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background-color: #f1f1f1;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #ddd;
+}
+
+.confirm-btn:hover {
+  background-color: #45a049;
+}

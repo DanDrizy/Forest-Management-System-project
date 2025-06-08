@@ -1,0 +1,53 @@
+<?php
+include '../../database/connection.php'; // Include the database connection file
+
+// Get parameters from URL
+$id = $_GET['id']; // Get the ID from the URL parameter
+$action = $_GET['action']; // Get the check parameter from the URL
+$tree_id = $_GET['tree_id'];
+$date = $_GET['date'];
+$amount = $_GET['amount'];
+
+if($action == 'send') {
+    // Mark the log as sent
+    $update = $pdo->prepare("UPDATE sawmill_transfer_records SET send = 'active', checking = '+' WHERE tranfer_id = :id");
+    $update->bindParam(':id', $id, PDO::PARAM_INT); // Bind the ID parameter
+    $update->execute(); // Execute the update query
+    
+    echo "<script>alert('The log has been sent successfully!');</script>";
+    echo "<script>window.location.href = '../pages/transfer.php';</script>";
+
+} elseif($action == 'unsend') {
+    // Check if there's a record with the same ID and checking = '-'
+    $select = $pdo->prepare("SELECT * FROM sawmill_transfer_records WHERE tranfer_id = :id AND checking = '-' ");
+    $select->bindParam(':id', $id, PDO::PARAM_INT); // Bind the ID parameter
+    $select->execute(); // Execute the select query
+    $transfer = $select->fetch(PDO::FETCH_ASSOC);
+    
+    if($transfer) {
+        // If record exists, update the amount and mark as inactive
+        $total_amount = $transfer['amount'] + $amount;
+        $update = $pdo->prepare("UPDATE sawmill_transfer_records SET send = 'unactive' WHERE tranfer_id = :id AND checking = '-' AND amount = :amount");
+        $update->bindParam(':id', $id, PDO::PARAM_INT); // Bind the ID parameter
+        $update->bindParam(':amount', $total_amount, PDO::PARAM_INT);
+        $update->execute(); // Execute the update query
+        
+        // Delete any records with the same ID and checking = '+'
+        $delete_plus = $pdo->prepare("DELETE FROM sawmill_transfer_records WHERE tranfer_id = :id AND checking = '+'");
+        $delete_plus->bindParam(':id', $id, PDO::PARAM_INT); // Bind the ID parameter
+        $delete_plus->execute(); // Execute the delete query
+        
+        echo "<script>alert('The log has been unsent and ORGANISED successfully!');</script>";
+        echo "<script>window.location.href = '../pages/transfer.php';</script>";
+        
+    } else {
+        // If no record exists, simply mark as inactive
+        $update = $pdo->prepare("UPDATE sawmill_transfer_records SET send = 'unactive' WHERE tranfer_id = :id");
+        $update->bindParam(':id', $id, PDO::PARAM_INT); // Bind the ID parameter
+        $update->execute(); // Execute the update query
+        
+        echo "<script>alert('The log has been unsent successfully!');</script>";
+        echo "<script>window.location.href = '../pages/transfer.php';</script>";
+    }
+}
+?>

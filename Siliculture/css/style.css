@@ -1,0 +1,278 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            height: 100vh;
+        }
+        a{
+            text-decoration: none;
+        }
+
+        .main-content
+        {
+            height: 100vh;
+            overflow-y: auto;
+        }
+        textarea
+        {
+            resize: none;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #030F0F;
+            color: white;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo img {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sidebar-menu a {
+            text-decoration: none;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 20px;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+            transition: ease .3s;
+
+        }
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.036);
+            color: white;
+            border-left: 3px solid #00dc82;
+            transition: ease .3s;
+
+        }
+        
+        
+        
+        .menu-item i {
+            font-size: 18px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #030F0F;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #00dc82;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(0, 220, 130, 0.1);
+            padding: 5px 15px;
+            border-radius: 30px;
+            color: #00dc82;
+        }
+        
+        .user-profile .avatar {
+            width: 30px;
+            height: 30px;
+            background-color: #00dc82;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a2731;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            background-color: rgba(240, 242, 245, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .dashboard-card {
+            background-color: #0a2731;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .card-title {
+            font-size: 14px;
+            color: #00dc82;
+        }
+        
+        .card-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00dc82;
+        }
+        
+        .card-subtitle {
+            font-size: 12px;
+            color: #7b8c98;
+        }
+        
+        .chart-container {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #1d3741;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 50% 100%);
+            background-color: #00dc82;
+            border-radius: 50%;
+        }
+        
+        .progress-bar.seventy-five .progress-fill {
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 50%);
+        }
+        
+        .progress-bar.twenty-five .progress-fill {
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 25%, 50% 25%);
+        }
+        
+        .progress-bar.fifteen .progress-fill {
+            clip-path: polygon(50% 50%, 50% 0%, 65% 0%, 65% 15%, 50% 15%);
+        }
+        
+        .arrow-up {
+            color: #00dc82;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .list-icon {
+            color: #00dc82;
+            font-size: 24px;
+        }
+        
+        .sales-message {
+            background-color: #0a2731;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+        }
+        
+        .sales-message h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .sales-message p {
+            color: #9aa0a6;
+            line-height: 1.5;
+        }
+        
+        .card-amount {
+            font-size: 12px;
+            color: #7b8c98;
+            margin-top: 5px;
+        }
+        
+        /* Alternative to pie charts - bar indicator */
+        .indicator {
+            width: 100%;
+            height: 8px;
+            background-color: #1d3741;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .indicator-fill {
+            height: 100%;
+            background-color: #00dc82;
+        }
+        
+        .data-visualization {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        /* Box chart instead of pie chart */
+        .box-chart {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #1d3741;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+        
+        .box-segment {
+            background-color: #00dc82;
+        }
+        
+        .box-segment.empty {
+            background-color: #1d3741;
+        }
+    
