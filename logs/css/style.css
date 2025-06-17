@@ -14,7 +14,7 @@ body {
 
 .image-container {
     flex: 1;
-    background-image: url('/api/placeholder/800/1200');
+    background-image: url('../img/_AMY0348.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
