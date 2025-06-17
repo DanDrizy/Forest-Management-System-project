@@ -239,6 +239,7 @@ checkUserAuth('sawmill');
                             <th>Amount</th>
                             <th>Location</th>
                             <th>Inserted</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -261,6 +262,17 @@ checkUserAuth('sawmill');
                                     <td><?php echo htmlspecialchars($item['t_amount']); ?></td>
                                     <td><?php echo htmlspecialchars($item['t_location']); ?></td>
                                     <td><?php echo date('M d, Y H:i', strtotime($item['t_indate'])); ?></td>
+                                    <td><?php
+                                    
+                                    if($item['status'] == 'unsend') {
+                                        echo '<button style="color: white; background:darkred; border:none; width:6rem; padding:5px; ">' . htmlspecialchars('NOT SENT') . '</button>';
+                                    } elseif ($item['status'] == 'send') {
+                                        echo '<button style="color: white; background:darkgreen; border:none; width:6rem; padding:5px; ">' . htmlspecialchars('SENT') . '</button>';
+                                    } else {
+                                        echo '<span style="color: red;">' . htmlspecialchars('NULL') . '</span>';
+                                    }
+                                    
+                                    ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>

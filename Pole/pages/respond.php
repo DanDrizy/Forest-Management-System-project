@@ -16,6 +16,17 @@
         {
             background: lightgreen;
         }
+        .admin-fild
+        {
+            margin: 20px 0 0;
+            padding: 10px;
+            color: #000000;
+
+        }
+        .i
+        {
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -35,7 +46,14 @@ $sel_3 = $pdo->query("SELECT * FROM request");
 $sel_3->execute();
 $received_count_3 = $sel_3->fetchAll(PDO::FETCH_ASSOC);
 
-$fetch = $pdo->query("SELECT * FROM received");
+$fetch = $pdo->query("SELECT 
+rec.*,
+rec.content as rec_content,
+request.content as req_content,
+rec.title as rec_title,
+request.title as req_title
+FROM request 
+LEFT JOIN received rec ON request.r_id = rec.re_id ORDER BY request.created_at DESC");
 $fetch->execute();
 $received_data = $fetch->fetchAll(PDO::FETCH_ASSOC);
 
@@ -50,7 +68,7 @@ $received_data = $fetch->fetchAll(PDO::FETCH_ASSOC);
             <div class="messages-header">
                 <h2><i class="fas fa-envelope"></i> Request And Requests</h2>
                 <div>
-                    <span class="message-count" id="messageCount"><?php echo $received_count + $received_count_2 ?? 0; ?></span>
+                    <span class="message-count" id="messageCount"><?php echo $received_count .'&nbsp;Respond &nbsp;&nbsp;&nbsp; '. $received_count_2 .'&nbsp;&nbsp;Request' ?? 0; ?></span>
                     <button class="refresh-btn" onclick="refreshMessages()">
                         <i class="fas fa-sync-alt"></i> Refresh
                     </button>
@@ -58,12 +76,18 @@ $received_data = $fetch->fetchAll(PDO::FETCH_ASSOC);
             </div>
             
             
-            <?php foreach($received_data as $data): ?>
+            <?php foreach($received_data as $data): 
+            if($data['req_title'] == NULL && $data['rec_title'] == NULL )
+            {
+                continue;
+            }    
+            ?>
                 <div class="messages-list" id="messagesList">
                 <!-- Sample messages - replace with dynamic PHP content -->
                 <div class="message-item">
                     <div class="message-header">
-                        <span class="message-sender"><?php echo $data['title']; ?></span>
+                        <span class="message-sender"> <i class="fas fa-" title="Title"></i>  <?php echo $data['req_title']; ?></span>
+                        
                         <div>
                             <span class="message-time"><?php
                             $datetime = $data['created_at'];;
@@ -72,33 +96,21 @@ $received_data = $fetch->fetchAll(PDO::FETCH_ASSOC);
                             <!-- <span class="message-priority priority-high">High</span> -->
                         </div>
                     </div>
-                    <div class="message-content"><?php echo $data['content']; ?></div>
+                    <div class="message-content"><?php echo 'Sent: '. $data['req_content']; ?></div>
+                    <div class="respond">
+                        <?php if($data['title'] == NULL): ?>
+                        <p class="admin-fild" style=" color:gray; font-style: italic; " ><i class="fas fa-clock i" title="Pending"></i> No Respond</p>
+                        <?php else: ?>
+                        <p class="request admin-fild"><i class="fas fa-message i" title="Respond"></i> <?php echo $data['rec_content']; ?></p>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 
                 
             </div>
             <?php endforeach; ?>
 
-            <?php foreach($received_count_3 as $data): ?>
-                <div class="messages-list request" id="messagesList">
-                <!-- Sample messages - replace with dynamic PHP content -->
-                <div class="message-item">
-                    <div class="message-header">
-                        <span class="message-sender"><?php echo $data['title']; ?></span>
-                        <div>
-                            <span class="message-time"><?php
-                            $datetime = $data['created_at'];;
-                                $readable = date("F j, Y \a\\t g:i A", strtotime($datetime));
-                                echo $readable; ?></span>
-                            <!-- <span class="message-priority priority-high">High</span> -->
-                        </div>
-                    </div>
-                    <div class="message-content"><?php echo $data['content']; ?></div>
-                </div>
-                
-                
-            </div>
-            <?php endforeach; ?>
+            <!--  -->
         </div>
 
         <!-- Timber Content Area (for future timber listings) -->
@@ -153,7 +165,9 @@ $received_data = $fetch->fetchAll(PDO::FETCH_ASSOC);
             </div>
         `;
         
-        messagesList.insertAdjacentHTML('afterbegin', messageHTML);
+        // messagesList.insertAdjacentHTML('afterbegin', messageHTML);
+
+
         
         // Update message count
         const currentCount = parseInt(messageCount.textContent);

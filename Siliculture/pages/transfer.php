@@ -24,86 +24,69 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/transfer.css">
+    <link rel="stylesheet" href="../css/transfer2.css">
     <style>
         .transfer-detail {
-            background: #00dc82;
             display: flex;
-            flex-direction: row;
-            color: #000000;
-            border-bottom: 1px solid #000000;
-
-
-        }
-
-        .transfer-details {
-            display: flex;
-            flex-direction: row;
-            gap: 2rem;
-
-
-        }
-
-        .transfer-summary {
-            border: 1px solid #00dc82;
-            height: 20rem;
-            overflow-y: auto;
-        }
-
-        /* Pagination Styles */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .pagination a,
-        .pagination span {
-            color: black;
-            padding: 8px 16px;
-            text-decoration: none;
-            border: 1px solid #ddd;
-            margin: 0 4px;
-            cursor: pointer;
-        }
-
-        .pagination a.active {
-            background-color: #00dc82;
-            color: white;
-            border: 1px solid #00dc82;
-        }
-
-        .pagination a:hover:not(.active) {
-            background-color: #ddd;
-        }
-
-        /* Status message styles */
-        .status-message {
-            padding: 10px 15px;
-            margin-bottom: 15px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            margin: 4px 0;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
             border-radius: 4px;
+            font-size: 14px;
         }
-
-        .status-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        
+        .transfer-detail-content {
+            flex: 1;
         }
-
-        .status-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        
+        .remove-log-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-left: 10px;
+            transition: background-color 0.2s ease;
         }
-
-        /* Mark rows that are already sent */
-        tr.sent-log {
-            background-color: #f0f0f0;
-            color: #666;
+        
+        .remove-log-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
         }
-
-        tr.sent-log td {
-            text-decoration: line-through;
+        
+        .remove-log-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .transfer-details {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            background:rgb(165, 210, 255);
+            border-radius: 4px;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        
+        .transfer-details:empty {
+            border: none;
+            padding: 0;
+        }
+        
+        .no-logs-message {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 20px;
         }
     </style>
 </head>
@@ -157,7 +140,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                                 <th>Amount</th>
                                 <th>Volume-1</th>
                                 <th>Volume-2</th>
-                                <th>Dimention-2</th>
+                                <th>Dimention-1</th>
                                 <th>Dimention-2</th>
                                 <th>Date</th>
                                 <th>Status</th>
@@ -193,7 +176,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                                 $is_transferred = isset($log['l_status']) && $log['l_status'] === 'sent';
                                 $row_class = $is_transferred ? 'sent-log' : '';
 
-                                echo "<tr data-log-id='{$log['l_id']}' data-name='{$plant['plant_name']}' data-amount='{$log['amount']}' data-volume 1='{$log['v1']} data-volume 2= {$log['v2']}' class='$row_class'>";
+                                echo "<tr data-log-id='{$log['l_id']}' data-name='{$plant['plant_name']}' data-amount='{$log['amount']}' data-volume1='{$log['v1']}' data-volume2='{$log['v2']}' class='$row_class'>";
 
                                 // Disable checkbox if already transferred
                                 $disabled = $is_transferred ? 'disabled' : '';
@@ -257,7 +240,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                 <div class="transfer-form">
                     <div class="transfer-summary" id="transferSummary">
 
-                        <h3>Transfered Summary</h3>
+                        <h3>Transfer Summary</h3>
                         <br>
                         <br>
                         <p>Selected logs : <span id="selectedCount">0</span></p>
@@ -272,7 +255,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                     </div>
 
                     <div class="action-buttons">
-                        <button type="submit" class="btn btn-primary">Confirm Transfer</button>
+                        <button type="submit" class="btn btn-primary" onclick="return validateTransfer()">Confirm Transfer</button>
                         <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
                     </div>
                 </div>
@@ -293,6 +276,15 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
             const transferMenuItem = document.querySelector('.menu-item[href*="transfer"]');
             if (transferMenuItem) {
                 transferMenuItem.classList.add('active-transfer');
+            }
+
+            // Check if transfer was successful and clear selections
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'transfer_complete') {
+                // Clear all selections after successful transfer
+                localStorage.removeItem('transferLogSelections');
+                selectedLogs.clear();
+                logDetails = {};
             }
 
             // Initialize the form and restore selections
@@ -387,11 +379,32 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                     id: row.cells[1].textContent,
                     name: row.getAttribute('data-name'),
                     amount: parseInt(row.getAttribute('data-amount')),
-                    measure: row.getAttribute('data-measure')
+                    volume1: row.getAttribute('data-volume1'),
+                    volume2: row.getAttribute('data-volume2')
                 };
             } else {
                 selectedLogs.delete(logId);
                 delete logDetails[logId];
+            }
+
+            // Update the transfer summary
+            updateTransferSummary();
+            // Save current selections
+            saveSelections();
+            // Update select all checkbox state
+            updateSelectAllCheckbox();
+        }
+
+        // Remove a specific log from selection
+        function removeLogFromSelection(logId) {
+            // Remove from selected logs
+            selectedLogs.delete(logId);
+            delete logDetails[logId];
+
+            // Uncheck the corresponding checkbox if it's on the current page
+            const checkbox = document.querySelector(`input[data-log-id="${logId}"]`);
+            if (checkbox) {
+                checkbox.checked = false;
             }
 
             // Update the transfer summary
@@ -425,26 +438,37 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
             const selectedLogsContainer = document.getElementById('selectedLogsContainer');
             selectedLogsContainer.innerHTML = '';
 
-            // Add hidden inputs for each selected log
-            selectedLogs.forEach(logId => {
-                const details = logDetails[logId];
-                if (!details) return;
+            if (selectedLogs.size === 0) {
+                transferDetails.innerHTML = '<div class="no-logs-message">No logs selected</div>';
+            } else {
+                // Add each selected log with remove button
+                selectedLogs.forEach(logId => {
+                    const details = logDetails[logId];
+                    if (!details) return;
 
-                totalAmount += details.amount;
+                    totalAmount += details.amount;
 
-                // Create the display detail
-                const detail = document.createElement('p');
-                detail.classList.add('transfer-detail');
-                detail.textContent = `Number: ${details.id}: ${details.name} = ${details.amount} Amount `;
-                transferDetails.appendChild(detail);
+                    // Create the display detail with remove button
+                    const detailDiv = document.createElement('div');
+                    detailDiv.classList.add('transfer-detail');
+                    detailDiv.innerHTML = `
+                        <div class="transfer-detail-content">
+                            <strong>ID ${details.id}:</strong> ${details.name} - Amount: ${details.amount}
+                        </div>
+                        <button type="button" class="remove-log-btn" onclick="removeLogFromSelection('${logId}')" title="Remove this log">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    `;
+                    transferDetails.appendChild(detailDiv);
 
-                // Create hidden input for form submission
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'selected_logs[]';
-                hiddenInput.value = logId;
-                selectedLogsContainer.appendChild(hiddenInput);
-            });
+                    // Create hidden input for form submission
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'selected_logs[]';
+                    hiddenInput.value = logId;
+                    selectedLogsContainer.appendChild(hiddenInput);
+                });
+            }
 
             document.getElementById('totalAmount').textContent = totalAmount;
         }
@@ -465,6 +489,20 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
 
             // Clear saved selections
             localStorage.removeItem('transferLogSelections');
+        }
+
+        // Validate transfer before submission
+        function validateTransfer() {
+            if (selectedLogs.size === 0) {
+                alert('Please select at least one log to transfer.');
+                return false;
+            }
+            
+            // Clear selections from localStorage before form submission
+            // This ensures they won't persist after successful transfer
+            localStorage.removeItem('transferLogSelections');
+            
+            return true;
         }
     </script>
 </body>

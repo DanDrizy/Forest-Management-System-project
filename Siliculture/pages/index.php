@@ -94,10 +94,12 @@ checkUserAuth('Siliculture'); // Check if the user is logged in and has the requ
                 <div class="card-info">
                     <div class="card-value"> <?php echo $logsCount; ?> </div>
                     <div class="card-title">Available Logs</div>
-                    <div class="card-amount">Amount: $12,399,223,000</div>
+                    <div class="card-amount">Logs that are produced from plant</div>
                 </div>
                 <div class="box-chart" style=" display: flex; align-items: center; justify-content: center; ">
-                <h1 style=" color: #00dc82;" >37%</h1>
+                <h1 style=" color: #00dc82;" >
+                    <i class=" fa fa-pencil "></i>
+                </h1>
                 </div>
             </div>
             
@@ -105,10 +107,12 @@ checkUserAuth('Siliculture'); // Check if the user is logged in and has the requ
                 <div class="card-info">
                     <div class="card-value"><?php echo $logsCountSend; ?></div>
                     <div class="card-title">Transfered Logs</div>
-                    <div class="card-amount">Amount: $203,112,554,810</div>
+                    <div class="card-amount">The Logs that are transfered to sawmill</div>
                 </div>
                 <div class="box-chart" style=" display: flex; align-items: center; justify-content: center; ">
-                <h1 style=" color: #00dc82;" >37%</h1>
+                <h1 style=" color: #00dc82;" >
+                    <i class=" fa fa-shopping-cart "></i>
+                </h1>
                 </div>
             </div>
         </div>

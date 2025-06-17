@@ -27,34 +27,34 @@ checkUserAuth('sales'); // Check if the user is logged in and has the required r
     include'../menu/menu.php';
     include '../../database/connection.php';
 
-    $select_stockin = $pdo->query("SELECT COUNT(*) FROM stockin WHERE s_amount > 0");
+    // Get stockin count - MySQL compatible
+    $select_stockin = $pdo->prepare("SELECT COUNT(*) FROM stockin WHERE s_amount > 0");
     $select_stockin->execute();
     $stockin_count = $select_stockin->fetchColumn();
 
-
-    $select_stockout = $pdo->query("SELECT COUNT(*) FROM stockout WHERE out_amount > 0");
+    // Get stockout count - MySQL compatible
+    $select_stockout = $pdo->prepare("SELECT COUNT(*) FROM stockout WHERE out_amount > 0");
     $select_stockout->execute();
     $stockout_count = $select_stockout->fetchColumn();
 
-    $select_profit = $pdo->query("SELECT 
-    out.*,
-    ins.*,
-    SUM(out.out_price) as out_price,
-    SUM(ins.price) as in_price,
-	SUM(out.out_price - ins.price) as profit
-    FROM stockout out
-    LEFT JOIN stockin ins ON out.in_id = ins.in_id
-    WHERE out.out_amount > 0");
+    // Get profit data - MySQL compatible with proper aggregation
+    $select_profit = $pdo->prepare("SELECT 
+        COALESCE(SUM(outs.out_price), 0) as out_price,
+        COALESCE(SUM(ins.price), 0) as in_price,
+        COALESCE(SUM(outs.out_price - ins.price), 0) as profit
+    FROM stockout outs LEFT JOIN stockin ins ON outs.in_id = ins.in_id
+    WHERE outs.out_amount > 0");
     $select_profit->execute();
-    $profit_data = $select_profit->fetchAll(PDO::FETCH_ASSOC);
-    $total_profit = $profit_data[0]['profit'] ?? 0; // Ensure we have a default value if no data is returned
-    $total_sumation = $profit_data[0]['out_price'] ?? 0; // Ensure we have a default value if no data is returned
-
-
-    $title = $pdo->query("SELECT * FROM announcements WHERE type = 'sale' OR type = 'All' ") ; // Set the title for the page
-    $fetch = $title->fetchAll(); // Fetch the title from the database
-
+    $profit_data = $select_profit->fetch(PDO::FETCH_ASSOC);
     
+    // Set default values with proper null handling
+    $total_profit = $profit_data['profit'] ?? 0;
+    $total_sumation = $profit_data['out_price'] ?? 0;
+
+    // Get announcements - MySQL compatible
+    $title = $pdo->prepare("SELECT * FROM announcements WHERE type = 'sale' OR type = 'All' ORDER BY date DESC LIMIT 2");
+    $title->execute();
+    $fetch = $title->fetchAll(PDO::FETCH_ASSOC);
     
     ?>
     
@@ -95,7 +95,7 @@ checkUserAuth('sales'); // Check if the user is logged in and has the required r
                 <div class="card-info">
                     <div class="card-value"> <?php echo number_format($total_sumation); ?> Rwf </div>
                     <div class="card-title">Wallet</div>
-                    <div class="card-amount">Amount: $12,399,223,000</div>
+                    <div class="card-amount">Money that you have in your wallet</div>
                 </div>
                 <div class="box-chart">
                     <div class="box-segment empty"></div>
@@ -109,7 +109,7 @@ checkUserAuth('sales'); // Check if the user is logged in and has the required r
                 <div class="card-info">
                     <div class="card-value"><?php echo number_format($total_profit); ?> Rwf</div>
                     <div class="card-title">Profit</div>
-                    <div class="card-amount">Amount: $203,112,554,810</div>
+                    <div class="card-amount">The profit that you gain in stockout</div>
                 </div>
                 <div class="box-chart">
                     <div class="box-segment empty"></div>
@@ -122,8 +122,8 @@ checkUserAuth('sales'); // Check if the user is logged in and has the required r
         
        <?php foreach( $fetch as $data ){ ?>
         <div class="sales-message">
-            <h2><?php echo $data['title']; ?></h2>
-            <p>"<?php echo $data['content']; ?>"</p>
+            <h2><?php echo htmlspecialchars($data['title']); ?></h2>
+            <p>"<?php echo htmlspecialchars($data['content']); ?>"</p>
         </div>
         <?php } ?>
     </div>

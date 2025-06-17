@@ -38,8 +38,8 @@ function getPlantHealthStats($pdo) {
 function getTimberStats($pdo) {
     $query = "SELECT 
         COUNT(*) as total_timber_logs,
-        SUM(t_volume) as total_volume,
-        SUM(t_amount) as total_amount,
+        COALESCE(SUM(t_volume), 0) as total_volume,
+        COALESCE(SUM(t_amount), 0) as total_amount,
         COUNT(CASE WHEN status = 'send' THEN 1 END) as processed_timber,
         AVG(t_height) as avg_timber_height,
         AVG(t_width) as avg_timber_width
@@ -54,7 +54,7 @@ function getTimberStats($pdo) {
 function getLogsStats($pdo) {
     $query = "SELECT 
         COUNT(*) as total_logs,
-        SUM(amount) as total_log_amount,
+        COALESCE(SUM(amount), 0) as total_log_amount,
         AVG(height) as avg_log_height,
         COUNT(CASE WHEN l_status = 'send' THEN 1 END) as processed_logs,
         COUNT(CASE WHEN l_status = 'unsend-sawmill' THEN 1 END) as pending_sawmill
@@ -77,7 +77,7 @@ function getProductionPipeline($pdo) {
     FROM germination g
     LEFT JOIN plant p ON g.g_id = p.g_id
     LEFT JOIN logs l ON p.p_id = l.p_id
-    LEFT JOIN timber t ON l.l_id = t.L_id
+    LEFT JOIN timber t ON l.l_id = t.l_id
     GROUP BY g.plant_name
     ORDER BY seeds_planted DESC";
     
@@ -89,14 +89,13 @@ function getProductionPipeline($pdo) {
 // Function to get monthly production trends
 function getMonthlyTrends($pdo) {
     $query = "SELECT 
-    strftime('%Y-%m', g_sdate) AS month,
-    COUNT(*) AS germinations,
-    SUM(seeds) AS seeds_planted
-FROM germination
-WHERE g_sdate >= date('now', '-12 months')
-GROUP BY strftime('%Y-%m', g_sdate)
-ORDER BY month;
-";
+        DATE_FORMAT(g_sdate, '%Y-%m') AS month,
+        COUNT(*) AS germinations,
+        SUM(seeds) AS seeds_planted
+    FROM germination
+    WHERE g_sdate >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+    GROUP BY DATE_FORMAT(g_sdate, '%Y-%m')
+    ORDER BY month";
     
     $stmt = $pdo->prepare($query);
     $stmt->execute();
@@ -244,19 +243,19 @@ $monthlyTrends = getMonthlyTrends($pdo);
                     </div>
                     <div class="stat-item">
                         <span>Seeds Planted:</span>
-                        <span class="stat-value"><?php echo number_format($germinationStats['total_seeds_planted']); ?></span>
+                        <span class="stat-value"><?php echo number_format($germinationStats['total_seeds_planted'] ?? 0); ?></span>
                     </div>
                     <div class="stat-item">
                         <span>Success Rate:</span>
-                        <span class="stat-value"><?php echo $germinationStats['success_rate']; ?>%</span>
+                        <span class="stat-value"><?php echo $germinationStats['success_rate'] ?? 0; ?>%</span>
                     </div>
                     <div class="stat-item">
                         <span>Pending:</span>
-                        <span class="stat-value"><?php echo $germinationStats['pending_germinations']; ?></span>
+                        <span class="stat-value"><?php echo $germinationStats['pending_germinations'] ?? 0; ?></span>
                     </div>
                 </div>
                 
-                <div class="stat-card">
+                <!-- <div class="stat-card">
                     <h3>🌿 Plant Health Analysis</h3>
                     <div class="stat-item">
                         <span>Total Plants:</span>
@@ -264,17 +263,17 @@ $monthlyTrends = getMonthlyTrends($pdo);
                     </div>
                     <div class="stat-item">
                         <span>Average Height:</span>
-                        <span class="stat-value"><?php echo round($plantStats['avg_height'], 2); ?> cm</span>
+                        <span class="stat-value"><?php echo round($plantStats['avg_height'] ?? 0, 2); ?> cm</span>
                     </div>
                     <div class="stat-item">
                         <span>Average DBH:</span>
-                        <span class="stat-value"><?php echo round($plantStats['avg_dbh'], 2); ?> cm</span>
+                        <span class="stat-value"><?php echo round($plantStats['avg_dbh'] ?? 0, 2); ?> cm</span>
                     </div>
                     <div class="stat-item">
                         <span>Health Rate:</span>
-                        <span class="stat-value"><?php echo $plantStats['health_rate']; ?>%</span>
+                        <span class="stat-value"><?php echo $plantStats['health_rate'] ?? 0; ?>%</span>
                     </div>
-                </div>
+                </div> -->
                 
                 <div class="stat-card">
                     <h3>🪵 Timber Production</h3>
@@ -292,7 +291,7 @@ $monthlyTrends = getMonthlyTrends($pdo);
                     </div>
                     <div class="stat-item">
                         <span>Processing Rate:</span>
-                        <span class="stat-value"><?php echo round(($timberStats['processed_timber'] / $timberStats['total_timber_logs']) * 100, 2); ?>%</span>
+                        <span class="stat-value"><?php echo $timberStats['total_timber_logs'] > 0 ? round(($timberStats['processed_timber'] / $timberStats['total_timber_logs']) * 100, 2) : 0; ?>%</span>
                     </div>
                 </div>
                 
@@ -340,10 +339,10 @@ $monthlyTrends = getMonthlyTrends($pdo);
                             <td><?php echo number_format($row['plants_grown']); ?></td>
                             <td><?php echo number_format($row['logs_produced']); ?></td>
                             <td><?php echo number_format($row['timber_processed']); ?></td>
-                            <td><?php echo $row['germination_to_plant_rate']; ?>%</td>
+                            <td><?php echo $row['germination_to_plant_rate'] ?? 0; ?>%</td>
                             <td>
                                 <?php 
-                                $efficiency = $row['germination_to_plant_rate'];
+                                $efficiency = $row['germination_to_plant_rate'] ?? 0;
                                 if($efficiency >= 80) {
                                     echo '<span class="efficiency-indicator high-efficiency">High</span>';
                                 } elseif($efficiency >= 50) {
@@ -366,16 +365,16 @@ $monthlyTrends = getMonthlyTrends($pdo);
             </div>
             
             <!-- Status Distribution Charts -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="chart-container">
                     <h3 class="chart-title">Germination Status Distribution</h3>
                     <canvas id="germinationStatusChart" width="400" height="400"></canvas>
-                </div>
+                </div> -->
                 
-                <div class="chart-container">
+                <!-- <div class="chart-container">
                     <h3 class="chart-title">Plant Health Distribution</h3>
                     <canvas id="plantHealthChart" width="400" height="400"></canvas>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -433,7 +432,7 @@ $monthlyTrends = getMonthlyTrends($pdo);
             data: {
                 labels: ['Successful', 'Pending'],
                 datasets: [{
-                    data: [<?php echo $germinationStats['successful_germinations']; ?>, <?php echo $germinationStats['pending_germinations']; ?>],
+                    data: [<?php echo $germinationStats['successful_germinations'] ?? 0; ?>, <?php echo $germinationStats['pending_germinations'] ?? 0; ?>],
                     backgroundColor: ['#26AD85', '#ffa500']
                 }]
             },
@@ -453,7 +452,7 @@ $monthlyTrends = getMonthlyTrends($pdo);
             data: {
                 labels: ['Healthy (A)', 'Others'],
                 datasets: [{
-                    data: [<?php echo $plantStats['healthy_plants']; ?>, <?php echo $plantStats['total_plants'] - $plantStats['healthy_plants']; ?>],
+                    data: [<?php echo $plantStats['healthy_plants'] ?? 0; ?>, <?php echo ($plantStats['total_plants'] - ($plantStats['healthy_plants'] ?? 0)); ?>],
                     backgroundColor: ['#26AD85', '#ff4444']
                 }]
             },

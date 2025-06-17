@@ -59,6 +59,7 @@ if (isset($_POST['ok'])) {
         $update_stockin->execute();
 
         echo "<script>alert('Stockout updated successfully!');</script>";
+        echo "<script>window.location.href = '../pages/stock-out.php';</script>";
         exit;
     }
 
@@ -79,5 +80,7 @@ if (isset($_POST['ok'])) {
     $update_stockin->execute();
 
     echo "<script>alert('Stockout added successfully!');</script>";
+    echo "<script>window.location.href = '../pages/stock-out.php';</script>";
+    exit;
 }
 ?>

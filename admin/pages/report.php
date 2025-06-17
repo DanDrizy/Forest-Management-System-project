@@ -8,9 +8,9 @@ function getGerminationStats($pdo) {
     $query = "SELECT 
         COUNT(*) as total_germinations,
         SUM(seeds) as total_seeds_planted,
-        COUNT(CASE WHEN g_status = 'send' THEN 1 END) as successful_germinations,
-        COUNT(CASE WHEN g_status = 'unsend' THEN 1 END) as pending_germinations,
-        ROUND(COUNT(CASE WHEN g_status = 'send' THEN 1 END) * 100.0 / COUNT(*), 2) as success_rate
+        SUM(CASE WHEN g_status = 'send' THEN 1 ELSE 0 END) as successful_germinations,
+        SUM(CASE WHEN g_status = 'unsend' THEN 1 ELSE 0 END) as pending_germinations,
+        ROUND(SUM(CASE WHEN g_status = 'send' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) as success_rate
     FROM germination";
     
     $stmt = $pdo->prepare($query);
@@ -24,9 +24,9 @@ function getPlantHealthStats($pdo) {
         COUNT(*) as total_plants,
         AVG(p_height) as avg_height,
         AVG(DBH) as avg_dbh,
-        COUNT(CASE WHEN health = 'A' THEN 1 END) as healthy_plants,
-        COUNT(CASE WHEN p_status = 'send' THEN 1 END) as ready_plants,
-        ROUND(COUNT(CASE WHEN health = 'A' THEN 1 END) * 100.0 / COUNT(*), 2) as health_rate
+        SUM(CASE WHEN health = 'A' THEN 1 ELSE 0 END) as healthy_plants,
+        SUM(CASE WHEN p_status = 'send' THEN 1 ELSE 0 END) as ready_plants,
+        ROUND(SUM(CASE WHEN health = 'A' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) as health_rate
     FROM plant";
     
     $stmt = $pdo->prepare($query);
@@ -40,7 +40,7 @@ function getTimberStats($pdo) {
         COUNT(*) as total_timber_logs,
         SUM(t_volume) as total_volume,
         SUM(t_amount) as total_amount,
-        COUNT(CASE WHEN status = 'send' THEN 1 END) as processed_timber,
+        SUM(CASE WHEN status = 'send' THEN 1 ELSE 0 END) as processed_timber,
         AVG(t_height) as avg_timber_height,
         AVG(t_width) as avg_timber_width
     FROM timber";
@@ -56,8 +56,8 @@ function getLogsStats($pdo) {
         COUNT(*) as total_logs,
         SUM(amount) as total_log_amount,
         AVG(height) as avg_log_height,
-        COUNT(CASE WHEN l_status = 'send' THEN 1 END) as processed_logs,
-        COUNT(CASE WHEN l_status = 'unsend-sawmill' THEN 1 END) as pending_sawmill
+        SUM(CASE WHEN l_status = 'send' THEN 1 ELSE 0 END) as processed_logs,
+        SUM(CASE WHEN l_status = 'unsend-sawmill' THEN 1 ELSE 0 END) as pending_sawmill
     FROM logs";
     
     $stmt = $pdo->prepare($query);
@@ -287,13 +287,13 @@ $reportDate = date('F j, Y');
                         <tr>
                             <td>Timber Production</td>
                             <td class="metric-value"><?php echo number_format($timberStats['total_timber_logs']); ?></td>
-                            <td class="metric-value"><?php echo round(($timberStats['processed_timber'] / $timberStats['total_timber_logs']) * 100, 2); ?>%</td>
+                            <td class="metric-value"><?php echo $timberStats['total_timber_logs'] > 0 ? round(($timberStats['processed_timber'] / $timberStats['total_timber_logs']) * 100, 2) : 0; ?>%</td>
                             <td><?php echo $timberStats['processed_timber']; ?> Processed</td>
                         </tr>
                         <tr>
                             <td>Logs Processing</td>
                             <td class="metric-value"><?php echo number_format($logsStats['total_logs']); ?></td>
-                            <td class="metric-value"><?php echo round(($logsStats['processed_logs'] / $logsStats['total_logs']) * 100, 2); ?>%</td>
+                            <td class="metric-value"><?php echo $logsStats['total_logs'] > 0 ? round(($logsStats['processed_logs'] / $logsStats['total_logs']) * 100, 2) : 0; ?>%</td>
                             <td><?php echo $logsStats['pending_sawmill']; ?> Pending Sawmill</td>
                         </tr>
                     </tbody>

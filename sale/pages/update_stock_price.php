@@ -92,7 +92,7 @@ try {
     $old_price = $existingRecord['out_price'];
     
     // Check what columns exist in stockout table (SQLite syntax)
-    $columnsStmt = $pdo->prepare("PRAGMA table_info(stockout)");
+    $columnsStmt = $pdo->prepare("DESCRIBE stockout;");
     $columnsStmt->execute();
     $columnInfo = $columnsStmt->fetchAll(PDO::FETCH_ASSOC);
     $columns = array_column($columnInfo, 'name');

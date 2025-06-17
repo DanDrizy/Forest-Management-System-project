@@ -97,7 +97,7 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
     include'../../database/connection.php'; // Include the database connection file
 
      // SQL query to select all trees
-    $query = "SELECT * FROM logs,plant,germination WHERE logs.p_id = plant.p_id AND plant.g_id = germination.g_id AND l_status = 'send' AND amount > 0  "; // Adjust the query as needed
+    $query = "SELECT * FROM logs,plant,germination WHERE logs.p_id = plant.p_id AND plant.g_id = germination.g_id AND l_status = 'sent' AND amount > 0  "; // Adjust the query as needed
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $trees = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -144,10 +144,10 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                     </div>              
                     <label class="names-info" for="status"> <p>Size(optional)</p> <p>Volume</p> </label>                 
                     <div class="form-group"  style=" display: flex; justify-content: space-between; gap: 1rem; ">                 
-                        <input type="text" name="size" id="" placeholder="Enter location">            
-                        <input type="text" name="volume" id="" placeholder="Volume"  required>            
+                        <input type="text" name="size" id="" placeholder="Enter Size">            
+                        <input type="text" name="volume" id="" placeholder="Volume">            
                     </div>     
-                    <label class="names-info" for="status"> <p>Note</p></label>                 
+                    <label class="names-info" for="status"> <p>Note(Optional)</p></label>                 
                     <div class="form-group"  style=" display: flex; justify-content: space-between; gap: 1rem; ">                 
                         <textarea name="note" id="" rows="4" placeholder="Enter note"></textarea>        
                     </div>                      

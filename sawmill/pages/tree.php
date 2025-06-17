@@ -42,22 +42,19 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                 <input type="text" placeholder="Search stock entries...">
                 <span class="search-icon"> <i class="fa fa-search"></i> </span>
             </div>
-            <!-- <div class="button-container">
-                
-                <button id="deleteSelected" class="delete-btn" onclick="confirmDeleteAll()">
-                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                    </svg>
-                    Delete
-                </button>
-            </div> -->
+           
         </div>
         <?php
         
         // Include the database connection file
         include_once '../../database/connection.php';
         // Fetch the tree data from the database
-        $stmt = $pdo->prepare("SELECT * FROM logs,plant,germination WHERE plant.g_id = germination.g_id AND plant.p_id = logs.p_id AND l_status ='send' AND amount > 0 ");
+        $stmt = $pdo->prepare("SELECT * 
+FROM logs
+LEFT JOIN plant ON logs.p_id = plant.p_id
+INNER JOIN germination ON plant.g_id = germination.g_id
+WHERE logs.l_status = 'sent'
+AND logs.amount > 0;");
         $stmt->execute();
         $trees = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $i = 1; // Initialize the counter variable
