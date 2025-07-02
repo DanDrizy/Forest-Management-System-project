@@ -13,83 +13,9 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
     <link rel="stylesheet" href="../css/style.css">     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.css" />
-    <link rel="stylesheet" href="../css/register.css">     
-    <style>  
-    .main-content
-    {
-        overflow: auto
-    }
-    .main-content::-webkit-scrollbar {
-        width: 8px;
-    }       
-    .main-content::-webkit-scrollbar-thumb {
-        background: #00dc82;
-        border-radius: 10px;
-    }
-    .main-content::-webkit-scrollbar-track {
-        background: #000;
-        border-radius: 10px;
-    }
-        .menu-item.active-logs {             
-            background-color: rgba(255, 255, 255, 0.1);             
-            color: white;             
-            border-left: 3px solid #00dc82;         
-        }
-        
-        /* Custom styles for the location autocomplete */
-        .awesomplete {
-            width: 100%;
-            position: relative;
-        }
-        
-        .awesomplete > ul {
-            border-radius: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 1px solid #ddd;
-        }
-        
-        .awesomplete > ul > li {
-            padding: 10px 15px;
-            border-bottom: 1px solid #f5f5f5;
-            cursor: pointer;
-        }
-        
-        .awesomplete > ul > li:hover {
-            background-color:rgb(228, 228, 228);
-            color: #333;
-        }
-        
-        .awesomplete mark {
-            background: #00dc8233;
-            color: #333;
-            font-weight: bold;
-            padding: 0;
-        }
-        
-        .awesomplete li:hover mark {
-            background: #00dc8233;
-        }
-        
-        .awesomplete li[aria-selected="true"] {
-            background-color:rgb(213, 212, 212);
-            color: #333;
-        }
-
-        .names-info{
-            color: darkgray;
-            display: flex;
-            justify-content: space-between;
-            padding: 5px;
-        }
-
-        textarea{
-            width: 100%;
-            resize: none;
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        
-    </style>
+    <link rel="stylesheet" href="../css/register.css">   
+    <link rel="stylesheet" href="../../sawmill/css/timber.css">  
+    
 </head> 
 <body>     
     <?php 
@@ -107,27 +33,27 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
         <div class="dashboard-grid-saw-a">         
             <div class="container">         
                 <div class="form-header">             
-                    <h2>Logs Registeration Form</h2>             
+                    <h2>Timber Registeration Form</h2>             
                     <p>Please fill  details below</p>         
                 </div>                  
                 <form id="registrationForm" method="post" action=" ../backend/add-logs-backend.php" enctype="multipart/form-data">             
                     <div class="form-group">                 
-                        <label class="names-info" for="tree_id"> <p>Log Names</p> <p>Location</p>  </label>  
+                        <label class="names-info" for="tree_id"> <p>Harvest Names</p></label>  
                         <div class="form-group"  style=" display: flex; justify-content: space-between; gap: 1rem; " >                 
 
 
                             <select name="l_id" id="">
+                                <option value="" hidden> Select Harvest</option>
                                 
                                 <?php foreach ($trees as $tree): 
                                     
                                     
                                     ?>
 
-                                    <option value="<?php echo $tree['l_id']; ?>">Logs Name: <?php echo $tree['plant_name']; ?> --- Amount: <?php echo $tree['amount']; ?>--- Height: <?php echo $tree['height']; ?> </option>
+                                    <option value="<?php echo $tree['l_id']; ?>">Harvest Name: <?php echo $tree['plant_name']; ?> --- Harvested Date: <?php echo $tree['l_indate']; ?> </option>
 
                                 <?php endforeach; ?>
-                            </select>
-                        <input type="text" name="location" id="" placeholder="Enter location" required>            
+                            </select>          
 
                         </div>                          
                         <label class="names-info" for="name"> <p>Amount Needed</p> <p>Type of Timber</p> </label>                 
@@ -142,11 +68,11 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                         <input type="number" id="provider" name="width" placeholder="Width" required>             
                                  
                     </div>              
-                    <label class="names-info" for="status"> <p>Size(optional)</p> <p>Volume</p> </label>                 
+                    <!-- <label class="names-info" for="status"> <p>Size(optional)</p> <p>Volume</p> </label>                 
                     <div class="form-group"  style=" display: flex; justify-content: space-between; gap: 1rem; ">                 
                         <input type="text" name="size" id="" placeholder="Enter Size">            
                         <input type="text" name="volume" id="" placeholder="Volume">            
-                    </div>     
+                    </div>      -->
                     <label class="names-info" for="status"> <p>Note(Optional)</p></label>                 
                     <div class="form-group"  style=" display: flex; justify-content: space-between; gap: 1rem; ">                 
                         <textarea name="note" id="" rows="4" placeholder="Enter note"></textarea>        

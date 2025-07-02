@@ -7,250 +7,8 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/table.css">
-    <style>
-        .menu-item.active-logs {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-left: 3px solid #00dc82;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #333;
-            margin: 0;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #999;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s;
-        }
-
-        .close-btn:hover {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #00dc82;
-            box-shadow: 0 0 0 3px rgba(0, 220, 130, 0.1);
-        }
-
-        .form-input:disabled {
-            background-color: #f8f9fa;
-            color: #6c757d;
-            cursor: not-allowed;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #00dc82, #00b369);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-            min-width: 100px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 220, 130, 0.3);
-        }
-
-        .btn-secondary {
-            background: #f8f9fa;
-            color: #6c757d;
-            border: 2px solid #e9ecef;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-            min-width: 100px;
-        }
-
-        .btn-secondary:hover {
-            background: #e9ecef;
-            border-color: #dee2e6;
-            color: #495057;
-        }
-
-        /* Delete confirmation styles */
-        .delete-modal .modal-content {
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .delete-icon {
-            width: 60px;
-            height: 60px;
-            background: #fee2e2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-
-        .delete-icon svg {
-            width: 30px;
-            height: 30px;
-            color: #dc2626;
-        }
-
-        .delete-message {
-            font-size: 16px;
-            color: #374151;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-            min-width: 100px;
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
-        }
-
-        /* Search highlighting */
-        .highlight {
-            background-color: #ffeb3b;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-
-        /* Loading state */
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        /* Success message */
-        .success-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #00dc82;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            z-index: 1100;
-            animation: slideInRight 0.3s ease-out;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/logs.css">
+    <style></style>
 </head>
 <body>
     <?php include'../menu/menu.php'; ?>
@@ -276,11 +34,11 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
 
     <div class="dashboard-grid-saw">
         <div class="container">
-        <h1>Logs Trees Table</h1>
+        <h1>Harvest</h1>
         
         <div class="header-actions">
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search stock entries...">
+                <input type="text" id="searchInput" placeholder="Search entries...">
                 <!-- <span class="search-icon"> <i class="fa fa-search"></i> </span> -->
             </div>
             <div class="button-container">
@@ -309,10 +67,12 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
                     </th>
                     <th class="row-id">ID</th>
                     <th>Name</th>
-                    <th>Amount</th>
-                    <th>Measures</th>
-                    <th>inDate</th>
-                    <th>Actions</th>
+                    <!-- <th>Amount</th> -->
+                    <!-- <th>Height</th> -->
+                    <th>Health</th>
+                    <th>Compartment</th>
+                    <th>Date</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -323,11 +83,11 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
                     </td>
                     <td class="row-id"> <?php echo $i; $i++; ?> </td>
                     <td> <?php echo $row['plant_name'] ; ?></td>
-                    <td> <?php echo $row['amount']; ?> </td>
-                    <td> <?php echo $row['v1']." cm"?> </td>
+                    <td> <?php echo $row['health']; ?> </td>
+                    <td> <?php echo $row['Compartment']; ?> </td>
                     <td><?php echo $row['indate']; ?></td>
                     <td class="action-buttons">
-                        <button class="edit-btn" onclick="openUpdateModal(<?php echo $row['l_id']; ?>, '<?php echo $row['plant_name']; ?>', <?php echo $row['amount']; ?>, <?php echo $row['v1']; ?>, '<?php echo $row['indate']; ?>')">
+                        <button class="edit-btn" onclick="openUpdateModal(<?php echo $row['l_id']; ?>, '<?php echo $row['plant_name']; ?>', <?php echo $row['amount']; ?>, '<?php echo $row['coments']; ?>', '<?php echo $row['indate']; ?>')">
                             <i class=" fa fa-pencil"></i>
                             Edit
                         </button>
@@ -347,10 +107,10 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
     <div id="updateModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Update Log Entry</h2>
+                <h2 class="modal-title">Update Entry</h2>
                 <button class="close-btn" onclick="closeModal()">&times;</button>
             </div>
-            <form id="updateForm">
+            <form id="updateForm" >
                 <input type="hidden" id="logId" name="logId">
                 
                 <div class="form-group">
@@ -364,13 +124,13 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Measure (cm)</label>
-                    <input type="number" id="measure" name="measure" class="form-input" step="0.1" required>
+                    <label class="form-label">Date</label>
+                    <input type="date" id="inDate" name="inDate" class="form-input" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Date</label>
-                    <input type="date" id="inDate" name="inDate" class="form-input" required>
+                    <label class="form-label">Comments</label>
+                    <textarea id="comments" name="comments" class="form-input" rows="3" placeholder="Enter your comments here..."></textarea>
                 </div>
                 
                 <div class="modal-actions">
@@ -444,12 +204,12 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
             }
         }
 
-        // Modal functions
-        function openUpdateModal(logId, plantName, amount, measure, inDate) {
+        // Modal functions - FIXED: Now properly handles comments parameter
+        function openUpdateModal(logId, plantName, amount, comments, inDate) {
             document.getElementById('logId').value = logId;
             document.getElementById('plantName').value = plantName;
             document.getElementById('amount').value = amount;
-            document.getElementById('measure').value = measure;
+            document.getElementById('comments').value = comments; // Handle null/undefined comments
             document.getElementById('inDate').value = inDate;
             document.getElementById('updateModal').style.display = 'block';
         }
@@ -498,7 +258,7 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
             });
         }
 
-        // Update form submission
+        // Update form submission - FIXED: Now properly handles comments field
         document.getElementById('updateForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -519,9 +279,8 @@ WHERE (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
                         const row = document.querySelector(`tr[data-id="${formData.get('logId')}"]`);
                         if (row) {
                             const cells = row.querySelectorAll('td');
-                            cells[3].textContent = formData.get('amount');
-                            cells[4].textContent = formData.get('measure') + ' cm';
-                            cells[5].textContent = formData.get('inDate');
+                            cells[3].textContent = formData.get('amount'); // Amount column
+                            cells[4].textContent = formData.get('inDate'); // Date column
                         }
                         
                         showSuccessMessage('Log entry updated successfully!');

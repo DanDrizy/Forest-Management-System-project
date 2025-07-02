@@ -30,7 +30,7 @@
         <div class="menu-item active-logs"> 
 
             <i class="fa fa-scissors"></i>
-            <span>Logs</span>
+            <span>Harvest</span>
         </div>
         </a>
         <a href="transfer.php">

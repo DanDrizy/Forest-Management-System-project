@@ -297,9 +297,9 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                                 <th>Type</th>
                                 <th>Height</th>
                                 <th>Width</th>
-                                <th>Size</th>
+                                <!-- <th>Size</th>
                                 <th>Volume</th>
-                                <th>Location</th>
+                                <th>Location</th> -->
                                 <th>Date</th>
                                 <th></th>
                             </tr>
@@ -365,9 +365,6 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                                 echo "<td>" . htmlspecialchars($log['type']) . "</td>";
                                 echo "<td>{$log['t_height']}</td>";
                                 echo "<td>{$log['t_width']}</td>";
-                                echo "<td>" . htmlspecialchars($log['size']) . "</td>";
-                                echo "<td>{$log['t_volume']}</td>";
-                                echo "<td>" . htmlspecialchars($log['t_location']) . "</td>";
                                 echo "<td>{$log['t_indate']}</td>";
                                 
                                 // Show transfer status

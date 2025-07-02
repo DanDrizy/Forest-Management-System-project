@@ -252,9 +252,9 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                     <th>Type</th>
                     <th>Height</th>
                     <th>Width</th>
-                    <th>Size</th>
-                    <th>Volume</th>
-                    <th>Location</th>
+                    <!-- <th>Size</th>
+                    <th>Volume</th> -->
+                    <!-- <th>Location</th> -->
                     <th>Recorded</th>
                     <th></th>
                 </tr>
@@ -273,9 +273,6 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                     <td class="searchable"> <?php echo $item['type']; ?> </td>
                     <td class="searchable"> <?php echo $item['t_height']?> </td>
                     <td class="searchable"> <?php echo $item['t_width']; ?> </td>
-                    <td class="searchable"> <?php echo $item['size']; ?> </td>
-                    <td class="searchable"> <?php echo $item['t_volume']; ?> </td>
-                    <td class="searchable"> <?php echo $item['t_location']; ?> </td>
                     <td class="searchable"> <?php echo $item['t_indate']; ?> </td>
                     <td class="action-buttons">
                         
@@ -347,10 +344,10 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                         <label for="editAmount">Amount:</label>
                         <input type="number" id="editAmount" name="amount" min="0" required>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="editSize">Size:</label>
                         <input type="number" id="editSize" name="size" min="0" step="0.01" required>
-                    </div>
+                    </div> -->
                 </div>
                 
                 <div class="form-row">
@@ -365,14 +362,14 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                 </div>
                 
                 <div class="form-row">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="editVolume">Volume:</label>
                         <input type="number" id="editVolume" name="volume" min="0" step="0.01" required>
-                    </div>
-                    <div class="form-group">
+                    </div> -->
+                    <!-- <div class="form-group">
                         <label for="editLocation">Location:</label>
                         <input type="text" id="editLocation" name="location" required>
-                    </div>
+                    </div> -->
                 </div>
                 
                 <div class="edit-buttons">
@@ -449,9 +446,9 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
             document.getElementById('editType').value = recordData.type;
             document.getElementById('editHeight').value = recordData.height;
             document.getElementById('editWidth').value = recordData.width;
-            document.getElementById('editSize').value = recordData.size;
-            document.getElementById('editVolume').value = recordData.volume;
-            document.getElementById('editLocation').value = recordData.location;
+            // document.getElementById('editSize').value = recordData.size;
+            // document.getElementById('editVolume').value = recordData.volume;
+            // document.getElementById('editLocation').value = recordData.location;
             
             document.getElementById('editDialog').style.display = 'flex';
         }
@@ -494,10 +491,10 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
                         amount: this.getAttribute('data-amount'),
                         type: this.getAttribute('data-type'),
                         height: this.getAttribute('data-height'),
-                        width: this.getAttribute('data-width'),
-                        size: this.getAttribute('data-size'),
-                        volume: this.getAttribute('data-volume'),
-                        location: this.getAttribute('data-location')
+                        width: this.getAttribute('data-width')
+                        // size: this.getAttribute('data-size'),
+                        // volume: this.getAttribute('data-volume'),
+                        // location: this.getAttribute('data-location')
                     };
                     openEditDialog(recordData);
                 });

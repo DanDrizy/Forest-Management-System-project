@@ -12,7 +12,7 @@
         <a href="tree.php">
         <div class="menu-item active-tree">
             <i class="fa fa-tree"></i>
-            <span>Received Logs</span>
+            <span>Received Harvest</span>
         </div>
         </a>
         <a href="logs.php">

@@ -93,8 +93,8 @@ checkUserAuth('Siliculture'); // Check if the user is logged in and has the requ
             <div class="dashboard-card">
                 <div class="card-info">
                     <div class="card-value"> <?php echo $logsCount; ?> </div>
-                    <div class="card-title">Available Logs</div>
-                    <div class="card-amount">Logs that are produced from plant</div>
+                    <div class="card-title">Harvested</div>
+                    <div class="card-amount">These are plants that were harvested to be used</div>
                 </div>
                 <div class="box-chart" style=" display: flex; align-items: center; justify-content: center; ">
                 <h1 style=" color: #00dc82;" >

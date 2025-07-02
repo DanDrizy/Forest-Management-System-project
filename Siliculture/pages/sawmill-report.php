@@ -172,9 +172,7 @@
 FROM germination g
 JOIN plant p ON p.g_id = g.g_id
 JOIN logs l ON l.p_id = p.p_id
-WHERE l.amount > 0 
-  AND (l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill');
- ");
+WHERE l.l_status = 'unsend' OR l.l_status = 'unsend-sawmill'");
     $select_report->execute();
     $fetch = $select_report->fetchAll();
     $i = 1;
@@ -245,9 +243,7 @@ WHERE l.amount > 0
                             </th> -->
                             <th class="row-id">ID</th>
                             <th>Name</th>
-                            <th>Logs Amount</th>
                             <th>DBH</th>
-                            <th>Height</th>
                             <th>Created</th>
                             <th>Health</th>
                             <th>Status</th>
@@ -262,9 +258,7 @@ WHERE l.amount > 0
                             </td> -->
                             <td class="row-id"><?php echo $i; $i++; ?></td>
                             <td><?php echo $data['plant_name'] ?></td>
-                            <td><?php echo $data['l_amount'] ?></td>
                             <td><?php echo $data['DBH'] ?></td>
-                            <td><?php echo $data['l_height'] ?></td>
                             <td><?php echo $data['l_indate'] ?></td>
                             <td><?php echo $data['l_health'] ?></td>
                             <td><?php echo $data['l_status'] == 'unsend' ? '<font color=green>Available</font>' : '<font color=darkred>Sawmill</font>'; ?></td>

@@ -23,9 +23,9 @@ try {
     $amount = $_POST['amount'] ?? 0;
     $height = $_POST['height'] ?? 0;
     $width = $_POST['width'] ?? 0;
-    $size = $_POST['size'] ?? 0;
-    $volume = $_POST['volume'] ?? 0;
-    $location = trim($_POST['location'] ?? '');
+    $size = 0;
+    $volume = 0;
+    $location = 'None-';
 
     // Validate required fields
     if (empty($recordId) || empty($type) || empty($location)) {

@@ -5,17 +5,20 @@ include'../../database/connection.php'; // Include the database connection file
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // $info = $_POST['info'];
     $p_id = $_POST['p_id'];
-    $amount = $_POST['amount'];
-    $height = $_POST['height'];
-    $d1 = $_POST['d-1'];
-    $d2 = $_POST['d-2'];
-    $v1 = $_POST['start-volume'];
-    $v2 = $_POST['end-volume'];
+    $amount = 0;
+    $height = 0;
+    $comments = $_POST['comments'];
+    $lt = $_POST['lt'];
+    $compartment = $_POST['compartment']; // Added compartment field
+    $d1 = 0;
+    $d2 = 0;
+    $v1 = 0;
+    $v2 = 0; // bino mbikoreye kugirango nirinde gusiba volime and dimentions in database
     $inDate = $_POST['indate'];
     $status = "unsend"; // Assuming you want to set a default status
 
 
-    $query = "INSERT INTO logs (p_id, amount, height,d1, d2, v1, v2, l_indate,l_status) VALUES (:p_id, :amount, :height, :d1, :d2, :v1, :v2, :indate, :status)";
+    $query = "INSERT INTO logs (p_id, amount, height,d1, d2, v1, v2, l_indate, l_status, coments, lt, compartment) VALUES (:p_id, :amount, :height, :d1, :d2, :v1, :v2, :indate, :status, :comment, :lt, :compartment)";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':p_id', $p_id);
     $stmt->bindParam(':amount', $amount);
@@ -26,6 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':v2', $v2);
     $stmt->bindParam(':indate', $inDate);
     $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':comment', $comments);
+    $stmt->bindParam(':lt', $lt);
+    $stmt->bindParam(':compartment', $compartment); // Bind the compartment parameter
 
 
     $update_plant = "UPDATE plant SET p_status = 'send' WHERE p_id = :p_id";

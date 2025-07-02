@@ -97,7 +97,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
     <div class="main-content">
 
         <div class="transfer-container">
-            <h2 class="transfer-header">Transfer Logs to Sawmill</h2>
+            <h2 class="transfer-header">Transfer Harvested tree to Sawmill</h2>
 
             <?php
             // Display success or error messages if they exist
@@ -137,11 +137,6 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                                 <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll()"></th>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Amount</th>
-                                <th>Volume-1</th>
-                                <th>Volume-2</th>
-                                <th>Dimention-1</th>
-                                <th>Dimention-2</th>
                                 <th>Date</th>
                                 <th>Status</th>
                             </tr>
@@ -176,7 +171,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                                 $is_transferred = isset($log['l_status']) && $log['l_status'] === 'sent';
                                 $row_class = $is_transferred ? 'sent-log' : '';
 
-                                echo "<tr data-log-id='{$log['l_id']}' data-name='{$plant['plant_name']}' data-amount='{$log['amount']}' data-volume1='{$log['v1']}' data-volume2='{$log['v2']}' class='$row_class'>";
+                                echo "<tr data-log-id='{$log['l_id']}' data-name='{$plant['plant_name']}' data-date='{$log['l_indate']}' data-volume1='{$log['v1']}' data-volume2='{$log['v2']}' class='$row_class'>";
 
                                 // Disable checkbox if already transferred
                                 $disabled = $is_transferred ? 'disabled' : '';
@@ -184,11 +179,6 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
 
                                 echo "<td>{$i}</td>";
                                 echo "<td>{$plant['plant_name']}</td>";
-                                echo "<td>{$log['amount']}</td>";
-                                echo "<td>{$log['v1']}</td>";
-                                echo "<td>{$log['v2']}</td>";
-                                echo "<td>{$log['d1']}</td>";
-                                echo "<td>{$log['d2']}</td>";
                                 echo "<td>{$log['indate']}</td>";
 
                                 // Show transfer status
@@ -244,7 +234,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                         <br>
                         <br>
                         <p>Selected logs : <span id="selectedCount">0</span></p>
-                        <p>Total amount : <span id="totalAmount">0</span></p>
+                        <!-- <p>Total amount : <span id="totalAmount">0</span></p> -->
                         <div class="transfer-details" id="transferDetails">
                             <!-- Will be populated dynamically -->
                         </div>
@@ -378,9 +368,7 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                 logDetails[logId] = {
                     id: row.cells[1].textContent,
                     name: row.getAttribute('data-name'),
-                    amount: parseInt(row.getAttribute('data-amount')),
-                    volume1: row.getAttribute('data-volume1'),
-                    volume2: row.getAttribute('data-volume2')
+                    harvested_Date: parseInt(row.getAttribute('data-date'))
                 };
             } else {
                 selectedLogs.delete(logId);
@@ -446,14 +434,14 @@ $all_log_ids = $all_logs_query->fetchAll(PDO::FETCH_COLUMN);
                     const details = logDetails[logId];
                     if (!details) return;
 
-                    totalAmount += details.amount;
+                    totalAmount = details.l_indate;
 
                     // Create the display detail with remove button
                     const detailDiv = document.createElement('div');
                     detailDiv.classList.add('transfer-detail');
                     detailDiv.innerHTML = `
                         <div class="transfer-detail-content">
-                            <strong>ID ${details.id}:</strong> ${details.name} - Amount: ${details.amount}
+                            <strong>ID ${details.id}:</strong> ${details.name} - Harvested Date: ${details.harvested_Date}
                         </div>
                         <button type="button" class="remove-log-btn" onclick="removeLogFromSelection('${logId}')" title="Remove this log">
                             <i class="fa fa-times"></i>

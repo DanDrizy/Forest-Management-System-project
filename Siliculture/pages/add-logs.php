@@ -74,6 +74,17 @@ checkUserAuth('Siliculture'); // Check if the user is logged in and has the requ
             background-color:rgb(213, 212, 212);
             color: #333;
         }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #00dc82;
+            border-radius: 4px;
+            resize: none;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #00dc82;
+        }
         
     </style>
 </head> 
@@ -111,8 +122,6 @@ checkUserAuth('Siliculture'); // Check if the user is logged in and has the requ
                                 
                                 <?php foreach ($trees as $tree): 
                                     
-                                    // $combine = $tree['p_id']."|".$tree['plant_name'];
-                                    
                                     ?>
 
                                     <option value="<?php echo $tree['p_id']; ?>">
@@ -127,24 +136,33 @@ checkUserAuth('Siliculture'); // Check if the user is logged in and has the requ
                                 <?php endforeach; ?>
                             </select>
                         </div>                          
-                        <label for="name">Number of Logs & Height</label>                 
+                        <!-- <label for="name">Number of Logs & Height</label>                 
                         <div class="form-group" style=" display: flex; justify-content: space-between; gap: 1rem; ">                 
                         <input type="number" step="0.1" min="0" id="name" name="amount" placeholder="Logs Amount" required>             
                         <input type="number" step="0.1" min="0" id="name" name="height" placeholder="Height" required> 
-                        </div>          
+                        </div>           -->
                     </div>                          
-                    <label for="provider">Dimantion Range</label>                 
+                    <label for="provider">LTs & Compartment</label>                 
                     <div class="form-group" style=" display: flex; justify-content: space-between; gap: 1rem; " >                 
-                        <input type="number" step="0.1" min="0" id="provider" name="d-1" placeholder="Dimantion Range one" required>             
-                        <input type="number" step="0.1" min="0" id="provider" name="d-2" placeholder="Dimantion Range two" required>             
-                                  
+                        <select name="lt">
+                            <option hidden>---select----</option>
+                            <option value="LT70 (1)">LT70 (1)</option>
+                            <option value="LT70 (2)">LT70 (2)</option>
+                            <option value="LT70 (3)">LT70 (3)</option>
+                            <option value="LT40 (1)">LT40 (1)</option>
+                            <option value="LT40 (2)">LT40 (2)</option>
+                            <option value="LT40 (3)">LT40 (3)</option>
+                            <option value="HR120 (1)">HR120 (1)</option>
+                            <option value="HR120 (2)">HR120 (2)</option>
+                            <option value="HR120 (3)">HR120 (3)</option>
+                            <option value="EG200 (2)">EG200 (2)</option>
+                        </select> 
+                        <input type="text" name="compartment" id="" placeholder="Compartment" required>       
                     </div>  
-                    <label for="provider">Volume range</label>                 
+                    <label for="provider">Comments <font style="color: gray; font-size: 12px;" >(optional)</font></label>                 
 
                     <div class="form-group" style=" display: flex; justify-content: space-between; gap: 1rem; " >                 
-                        <input type="number" step="0.1" min="0" id="provider" name="start-volume" placeholder="Volume Range One" required>           
-                        <input type="number" step="0.1" min="0"  id="provider" name="end-volume" placeholder="Volume Range Two" required>         
-                                
+                        <textarea rows="6" name="comments" placeholder="Enter any Comment" ></textarea>     
                     </div>             
                     <div class="form-group">                 
                         <label for="status">inserted Date</label>                 
