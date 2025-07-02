@@ -16,6 +16,19 @@
         body {
             background-color: #f5f7fa;
         }
+        .user-avatar
+        {
+            overflow: hidden;
+            object-fit: cover;
+            
+        }
+        .user-avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
         
         
         
@@ -117,12 +130,24 @@
     </style>
 </head>
 <body>
+    <?php
+    $id = $_SESSION['user_id'] ?? null;
+    $select = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+    $select->execute([$id]);
+    $user = $select->fetch(PDO::FETCH_ASSOC);
+    $username = $user['name'];
+    $part = explode(" ", $username);
+    $last_name = $part[1] ?? $username; // Get the first name only
+
+    $profile_picture = $user['image'] ?? 'default-avatar.png'; // Default avatar if not set
+
+    ?>
     
 <div class="header">
         <div class="dashboard-title"><h1>Siliculture Dashboard</h1></div>
         <div class="user-profile" id="userProfile">
-            <div class="avatar"> <i class="fas fa-sign-out-alt"></i> </div>
-            <div class="user-name">Logout</div>
+            <div class="user-avatar"><img src="../../admin/backend/uploads/<?php echo $profile_picture; ?>" alt=""> </div>
+            <div class="user-name user-align"><font style=" font-size: 12px; " ><?php echo $last_name; ?></font> <p style=" font-size: 12px; ">Logout </p> </div>
         </div>
     </div>
     

@@ -45,11 +45,11 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
     $select_timber_num = $select_timber->fetchColumn(); // Fetch the total number of timber records
 
 
-    $select_logs = $pdo->query("SELECT COUNT(*) as sumation FROM logs WHERE l_status = 'send' AND amount > 0");
+    $select_logs = $pdo->query("SELECT COUNT(*) as sumation FROM logs WHERE l_status = 'sent'");
     $select_logs->execute(); // Execute the query to get the total number of timber records
     $select_logs_num = $select_logs->fetchColumn();
 
-    $select_logs_del = $pdo->query("SELECT COUNT(*) as sumation FROM logs WHERE l_status = 'unsend-sawmill' AND amount > 0");
+    $select_logs_del = $pdo->query("SELECT COUNT(*) as sumation FROM request WHERE read_status = '0' AND user = 'pole' ");
     $select_logs_del->execute(); // Execute the query to get the total number of timber records
     $select_logs_num_del = $select_logs_del->fetchColumn();
 
@@ -87,22 +87,22 @@ checkUserAuth('sawmill'); // Check if the user is logged in and has the required
             <div class="dashboard-card">
                 <div class="card-info">
                     <div class="card-value"><?php echo $select_logs_num; ?></div>
-                    <div class="card-title">Available Sent Logs</div>
+                    <div class="card-title">Available Sent Harvest</div>
                     <div class="card-subtitle">Profit according to the records</div>
                 </div>
                 <div class="icon-box" style="display: flex; align-items: center;">
-                    <i class="fas fa-tree"></i>
+                    <i class="fas fa-cut"></i>
                 </div>
             </div>
             
             <div class="dashboard-card">
                 <div class="card-info">
                     <div class="card-value"><?php echo $select_logs_num_del; ?></div>
-                    <div class="card-title">Logs Deleted</div>
+                    <div class="card-title">Un Read Pole Request</div>
                     <div class="card-amount">The Logs that sawmill Deleted</div>
                 </div>
                 <div class="icon-box" style="display: flex; align-items: center;">
-                    <i class="fas fa-tree"></i>
+                    <i class="fas fa-message"></i>
                 </div>
             </div>
             

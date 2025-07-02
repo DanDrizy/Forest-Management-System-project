@@ -142,7 +142,7 @@ text-decoration: none;
 }
 
 .user-avatar {
-    background-color: #00ff9d;
+    /* background-color: #00ff9d; */
     color: #1a1a1a;
     width: 30px;
     height: 30px;

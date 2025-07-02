@@ -1,6 +1,8 @@
 <?php
 require_once '../../logs/backend/auth_check.php'; // Include the authentication check
 checkUserAuth('admin'); // Check if the user is logged in and has the required role
+
+include '../../database/connection.php'; // Include the database connection
 ?>
 
 
@@ -139,7 +141,6 @@ checkUserAuth('admin'); // Check if the user is logged in and has the required r
 
                 <ul class="announcements-list">
                     <?php
-                    include('../../database/connection.php');
 
                     $select_data = $pdo->query("SELECT * FROM announcements ORDER BY date DESC");
                     while ($row = $select_data->fetch(PDO::FETCH_ASSOC)) {

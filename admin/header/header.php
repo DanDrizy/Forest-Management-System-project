@@ -16,15 +16,29 @@
         body {
             background-color: #f5f7fa;
         }
+        .user-align
+        {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        p
+        {
+            font-size: 10px;
+        }
+        .user-avatar
+        {
+            overflow: hidden;
+            object-fit: cover;
+        }
+        .user-avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
         
-       
-        
-        
-        
-        
-        
-        
-        
+     
         
         
         /* Overlay for the popup */
@@ -121,11 +135,21 @@
     </style>
 </head>
 <body>
+    <?php
+    
+    $id = $_SESSION['user_id'] ?? null;
+    $select = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+    $select->execute([$id]);
+    $user = $select->fetch(PDO::FETCH_ASSOC);
+    $username = $user['name'];
+    $profile_picture = $user['image'] ?? 'default-avatar.png'; // Default avatar if not set
+
+    ?>
     <div class="header">
         <div class="dashboard-title">Admin Dashboard</div>
         <div class="user-profile" id="userProfile">
-            <div class="user-avatar"> <i class="fa fa-user-circle"> </i> </div>
-            <div class="user-name">Logout</div>
+            <div class="user-avatar"> <img src="../backend/uploads/<?php echo $profile_picture; ?>" alt=""> </div>
+            <div class="user-name user-align"><?php echo $username; ?> <p>Logout </p> </div>
         </div>
     </div>
     
