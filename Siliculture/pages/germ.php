@@ -41,6 +41,11 @@
                                 <i class="fa fa-download"></i> Export
                             </button>
                         </form>
+                        <a href="germination_map.php">
+                            <button class="btn btn-success" style="margin-right: 10px;">
+                                <i class="fa fa-map-marker"></i> View Map
+                            </button>
+                        </a>
                         <a href="add_germine.php">
                             <button class="btn btn-primary">
                             <i class="fa fa-plus"></i> New Germine
