@@ -1,3 +1,13 @@
+
+<?php 
+
+require_once '../../logs/backend/auth_check.php'; // Include the authentication check
+checkUserAuth('Siliculture'); // Check if the user is logged in and has the required role
+
+include '../../database/connection.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +27,7 @@
 
     <?php 
     include'../header/header.php';
-    include'../../database/connection.php';
+    // include'../../database/connection.php';
     
     $select = $pdo->query("SELECT 
     *
