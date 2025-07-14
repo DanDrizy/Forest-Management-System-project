@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $tree_name = $_POST['tree_name'] ?? '';
                 $latitude = $_POST['latitude'] ?? '';
                 $longitude = $_POST['longitude'] ?? '';
+                $g_id = $_POST['g_id']; // ✅ Get g_id
                 
                 if (empty($tree_name) || empty($latitude) || empty($longitude)) {
                     throw new Exception('All fields are required');
@@ -33,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo->exec($createTableQuery);
                 
                 // Insert the new pin
-                $stmt = $pdo->prepare("INSERT INTO germination_pins (tree_name, latitude, longitude) VALUES (?, ?, ?)");
-                $result = $stmt->execute([$tree_name, $latitude, $longitude]);
+                $stmt = $pdo->prepare("INSERT INTO germination_pins (tree_name, latitude, longitude, g_id) VALUES (?, ?, ?,?)");
+                $result = $stmt->execute([$tree_name, $latitude, $longitude, $g_id]);
                 
                 if ($result) {
                     echo json_encode(['success' => true, 'message' => 'Pin saved successfully']);
@@ -78,3 +79,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
+

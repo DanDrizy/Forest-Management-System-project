@@ -18,10 +18,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/germ.css">
     <style>
-        .search-box
-        {
-            padding: 10px;
-        }
+        .search-box { padding: 10px; }
+        .modal-view { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-view-content { background-color: #fff; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px; }
+        .close-view { float: right; font-size: 24px; font-weight: bold; cursor: pointer; }
+        .modal-view-content h3 { margin-top: 0; }
     </style>
 </head>
 <body>
@@ -133,6 +134,15 @@
             </div>
         </div>
     </div>
+    <div id="viewModal" class="modal-view">
+    <div class="modal-view-content">
+        <span class="close-view" onclick="closeViewModal()">&times;</span>
+        <h3>Environmental Data Overview</h3>
+        <div id="viewContent">
+            <!-- Dynamic data inserted here -->
+        </div>
+    </div>
+</div>
 
     <script>
         // Store original data for filtering
@@ -162,6 +172,8 @@
                         <div class="action-buttons">
                             <button class="action-btn action-edit" onclick="openUpdateModal(${row.g_id}, '${row.plant_name}', '${row.seeds}', '${row.g_sdate}', '${row.g_edate}', '${row.soil}')"><i class="fa fa-edit"></i></button>
                             <button class="action-btn action-delete" onclick="deleteRecord(${row.g_id}, '${row.plant_name}')"><i class="fa fa-trash"></i></button>
+                    <button class="action-btn action-view" onclick="viewEnvironmentalData(${row.g_id})"><i class="fa fa-eye"></i></button>
+
                         </div>
                     </td>
                 `;
@@ -276,6 +288,30 @@
                 });
             }
         }
+
+        function viewEnvironmentalData(gId) {
+    fetch('get_environmental_data.php?g_id=' + gId)
+        .then(response => response.json())
+        .then(data => {
+            const content = document.getElementById('viewContent');
+            if (data.success) {
+                content.innerHTML = `
+                    <strong>Tree Name:</strong> ${data.tree_name}<br>
+                    <strong>Biodiversity Observations:</strong><br>
+                    ${data.biodiversity_html || 'None'}<br>
+                    <strong>Soil Health Records:</strong><br>
+                    ${data.soil_html || 'None'}<br>
+                `;
+            } else {
+                content.innerHTML = '<p>No environmental data found.</p>';
+            }
+            document.getElementById('viewModal').style.display = 'block';
+        });
+}
+
+function closeViewModal() {
+    document.getElementById('viewModal').style.display = 'none';
+}
     </script>
 </body>
 </html>
